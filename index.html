@@ -1,0 +1,1048 @@
+<!doctype html>
+<html lang="th">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>เครื่องมือช่วยแต่งมาณวกฉันท์ ๘</title>
+  
+  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+  <script src="/_sdk/element_sdk.js"></script>
+  <style>
+        body {
+            box-sizing: border-box;
+            font-family: 'Prompt', 'Kanit', 'Sarabun', sans-serif;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            min-height: 100%;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            padding-bottom: 10px; /* เพิ่ม padding สำหรับ counter */
+        }
+
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .logo {
+            width: 80px;
+            height: 80px;
+            margin: 0 auto 20px;
+            border-radius: 50%;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .logo img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .app-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .developer {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            font-weight: 300;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .pattern-info {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .pattern-info h3 {
+            color: #8b4513;
+            margin: 0 0 15px 0;
+            font-size: 1.4rem;
+            font-weight: 600;
+        }
+
+        .pattern-info p {
+            color: #5d4037;
+            margin: 0;
+            font-size: 1.1rem;
+            line-height: 1.6;
+        }
+
+        .verse-section {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 20px;
+            border: 2px solid #e9ecef;
+            transition: all 0.3s ease;
+        }
+
+        .verse-section:hover {
+            border-color: #667eea;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.1);
+        }
+
+        .verse-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+
+        .verse-title {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #495057;
+        }
+
+        .pattern-display {
+            display: flex;
+            gap: 8px;
+        }
+
+        .syllable {
+            padding: 8px 16px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: white;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
+        .syllable.kru {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+        }
+
+        .syllable.lahu {
+            background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+        }
+
+        .word-inputs {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .word-input {
+            padding: 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            font-size: 1.1rem;
+            font-family: inherit;
+            transition: all 0.3s ease;
+            background: white;
+        }
+
+        .word-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        .word-input.correct {
+            border-color: #28a745;
+            background: #f8fff9;
+        }
+
+        .word-input.incorrect {
+            border-color: #dc3545;
+            background: #fff8f8;
+        }
+
+        .verse-feedback {
+            padding: 15px;
+            border-radius: 8px;
+            font-weight: 500;
+            text-align: center;
+            min-height: 20px;
+        }
+
+        .verse-feedback.success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .verse-feedback.error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .verse-feedback.partial {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .result-section {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            text-align: center;
+            margin-top: 30px;
+        }
+
+        .result-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+        }
+
+        .result-text {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            font-size: 1.1rem;
+            line-height: 1.8;
+            min-height: 100px;
+            word-wrap: break-word;
+        }
+
+        /* CSS สำหรับสัมผัส */
+        .samphus-send {
+            border: 3px solid #e67e22 !important;
+        }
+
+        .samphus-receive {
+            border: 3px solid #9b59b6 !important;
+        }
+
+        .samphus-feedback {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            text-align: center;
+            min-height: 15px;
+        }
+
+        .samphus-correct {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .samphus-incorrect {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .samphus-pending {
+            background: #fff3cd;
+            color: #856404;
+            border: 1px solid #ffeaa7;
+        }
+
+        .copy-button:hover {
+            background: rgba(255,255,255,0.3);
+            border-color: rgba(255,255,255,0.5);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+
+        .copy-button:active {
+            transform: translateY(0);
+        }
+
+        .copy-button:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Visitor Counter Style */
+        .visitor-counter {
+            margin-top: 30px;
+            text-align: center;
+            font-size: 13px;
+            color: #64748b;
+            border-top: 1px solid #e2e8f0;
+            padding-top: 20px;
+        }
+        
+        .visitor-count-number {
+            font-weight: bold;
+            color: #667eea;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+                border-radius: 10px;
+            }
+
+            .header {
+                padding: 20px;
+            }
+
+            .app-title {
+                font-size: 1.8rem;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .verse-header {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .pattern-display {
+                align-self: stretch;
+                justify-content: center;
+            }
+
+            .word-inputs {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+  <style>@view-transition { navigation: auto; }</style>
+  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
+ </head>
+ <body>
+  <div class="container">
+   <header class="header">
+    <div class="logo"><img src="https://img5.pic.in.th/file/secure-sv1/logo-vichakarngo-6.png" alt="โลโก้วิชาการงอ" onerror="this.src=''; this.alt='โลโก้ไม่สามารถโหลดได้'; this.style.display='none';">
+    </div>
+    <h1 class="app-title" id="app-title">เครื่องมือช่วยแต่งมาณวกฉันท์ ๘</h1>
+    <p class="developer" id="developer-name">พัฒนาโดย ครูนนทพัทธ์ หิรัญเรือง</p>
+   </header>
+   <div style="text-align: center; display: flex; flex-direction: column; gap: 15px; align-items: center; padding: 20px; background: #f8f9fa;"><a href="https://www.homelittlegirl.com/index.php?topic=13947.0" target="_blank" rel="noopener noreferrer" style="display: inline-block; transition: transform 0.3s ease;"> <img src="https://img5.pic.in.th/file/secure-sv1/logo-vichakarngo-8.png" alt="Home Little Girl" style="max-width: 200px; max-height: 80px; width: auto; height: auto; 
+                            border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                            transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.transform='translateY(-2px) scale(1.02)'; this.style.boxShadow='0 6px 20px rgba(0,0,0,0.25)'" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onerror="this.style.display='none'; this.alt='ภาพไม่สามารถโหลดได้';"> </a> <a href="https://nonthaphathr.github.io/datalahu/" target="_blank" rel="noopener noreferrer" style="display: inline-block; transition: transform 0.3s ease;"> <img src="https://img5.pic.in.th/file/secure-sv1/logo-vichakarngo-7.png" alt="คลังคำลหุ" style="max-width: 200px; max-height: 80px; width: auto; height: auto; 
+                            border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+                            transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.transform='translateY(-2px) scale(1.02)'; this.style.boxShadow='0 6px 20px rgba(0,0,0,0.25)'" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onerror="this.style.display='none'; this.alt='ภาพไม่สามารถโหลดได้';"> </a>
+   </div>
+   <main class="content">
+    <div class="pattern-info">
+     <h3>ข้อมูลควรรู้</h3>
+     <div id="pattern-description" style="text-align: left; line-height: 1.8;">
+      <p style="margin: 0 0 15px 0; font-weight: 600;">มาณวกฉันท์ ๘ (มา-นะ-วะ-กะ-ฉัน)</p>
+      <p style="margin: 0 0 15px 0;">มาณวกฉันท์ มีความหมายว่า "ประดุจเด็กหนุ่ม" ใช้แต่งบรรยายความที่รวดเร็ว ลักษณะครุ-ลหุ เหมือนกันทุกบาท คือ ครุ-ลหุ-ลหุ-ครุ ครุ-ลหุ-ลหุ-ครุ</p>
+      <p style="margin: 0 0 10px 0; font-weight: 600;">รูปแบบของมาณวกฉันท์ ๘</p>
+      <p style="margin: 0 0 8px 0; padding-left: 20px;">หนึ่งบท จะมี ๔ บาท</p>
+      <p style="margin: 0; padding-left: 20px;">แต่ละบาทแบ่งเป็น ๒ วรรค วรรคละ ๔ พยางค์ (รวมเป็น ๘ พยางค์ในหนึ่งบาท ๘ วรรคในหนึ่งบท)</p>
+     </div>
+    </div>
+    <div class="verse-section">
+     <div class="verse-header"><span class="verse-title">วรรคที่ 1 (4 คำ)</span>
+      <div class="pattern-display"><span class="syllable kru">ครุ</span> <span class="syllable lahu">ลหุ</span> <span class="syllable lahu">ลหุ</span> <span class="syllable kru">ครุ (ส่ง)</span>
+      </div>
+     </div>
+     <div class="word-inputs"><input type="text" class="word-input kru-required" data-verse="1" data-position="1" placeholder="คำที่ 1 (ครุ)"> <input type="text" class="word-input lahu-required" data-verse="1" data-position="2" placeholder="คำที่ 2 (ลหุ)"> <input type="text" class="word-input lahu-required" data-verse="1" data-position="3" placeholder="คำที่ 3 (ลหุ)"> <input type="text" class="word-input kru-required samphus-send" data-verse="1" data-position="4" data-samphus="send" placeholder="คำที่ 4 (ครุ-ส่ง)">
+     </div>
+     <div class="verse-feedback" id="verse1-feedback"></div>
+     <div class="samphus-feedback" id="samphus1-feedback"></div>
+    </div>
+    <div class="verse-section">
+     <div class="verse-header"><span class="verse-title">วรรคที่ 2 (4 คำ)</span>
+      <div class="pattern-display"><span class="syllable kru">ครุ (รับ)</span> <span class="syllable lahu">ลหุ</span> <span class="syllable lahu">ลหุ</span> <span class="syllable kru">ครุ (ส่ง)</span>
+      </div>
+     </div>
+     <div class="word-inputs"><input type="text" class="word-input kru-required samphus-receive" data-verse="2" data-position="1" data-samphus="receive" placeholder="คำที่ 1 (ครุ-รับ)"> <input type="text" class="word-input lahu-required" data-verse="2" data-position="2" placeholder="คำที่ 2 (ลหุ)"> <input type="text" class="word-input lahu-required" data-verse="2" data-position="3" placeholder="คำที่ 3 (ลหุ)"> <input type="text" class="word-input kru-required samphus-send" data-verse="2" data-position="4" data-samphus="send" placeholder="คำที่ 4 (ครุ-ส่ง)">
+     </div>
+     <div class="verse-feedback" id="verse2-feedback"></div>
+     <div class="samphus-feedback" id="samphus2-feedback"></div>
+    </div>
+    <div class="verse-section">
+     <div class="verse-header"><span class="verse-title">วรรคที่ 3 (4 คำ)</span>
+      <div class="pattern-display"><span class="syllable kru">ครุ</span> <span class="syllable lahu">ลหุ</span> <span class="syllable lahu">ลหุ</span> <span class="syllable kru">ครุ (รับ)</span>
+      </div>
+     </div>
+     <div class="word-inputs"><input type="text" class="word-input kru-required" data-verse="3" data-position="1" placeholder="คำที่ 1 (ครุ)"> <input type="text" class="word-input lahu-required" data-verse="3" data-position="2" placeholder="คำที่ 2 (ลหุ)"> <input type="text" class="word-input lahu-required" data-verse="3" data-position="3" placeholder="คำที่ 3 (ลหุ)"> <input type="text" class="word-input kru-required samphus-receive" data-verse="3" data-position="4" data-samphus="receive" placeholder="คำที่ 4 (ครุ-รับ)">
+     </div>
+     <div class="verse-feedback" id="verse3-feedback"></div>
+     <div class="samphus-feedback" id="samphus3-feedback"></div>
+    </div>
+    <div class="verse-section">
+     <div class="verse-header"><span class="verse-title">วรรคที่ 4 (4 คำ)</span>
+      <div class="pattern-display"><span class="syllable kru">ครุ</span> <span class="syllable lahu">ลหุ</span> <span class="syllable lahu">ลหุ</span> <span class="syllable kru">ครุ (ส่ง)</span>
+      </div>
+     </div>
+     <div class="word-inputs"><input type="text" class="word-input kru-required" data-verse="4" data-position="1" placeholder="คำที่ 1 (ครุ)"> <input type="text" class="word-input lahu-required" data-verse="4" data-position="2" placeholder="คำที่ 2 (ลหุ)"> <input type="text" class="word-input lahu-required" data-verse="4" data-position="3" placeholder="คำที่ 3 (ลหุ)"> <input type="text" class="word-input kru-required samphus-send" data-verse="4" data-position="4" data-samphus="send" placeholder="คำที่ 4 (ครุ-ส่ง)">
+     </div>
+     <div class="verse-feedback" id="verse4-feedback"></div>
+     <div class="samphus-feedback" id="samphus4-feedback"></div>
+    </div>
+    <div class="verse-section">
+     <div class="verse-header"><span class="verse-title">วรรคที่ 5 (4 คำ)</span>
+      <div class="pattern-display"><span class="syllable kru">ครุ</span> <span class="syllable lahu">ลหุ</span> <span class="syllable lahu">ลหุ</span> <span class="syllable kru">ครุ (ส่ง)</span>
+      </div>
+     </div>
+     <div class="word-inputs"><input type="text" class="word-input kru-required" data-verse="5" data-position="1" placeholder="คำที่ 1 (ครุ)"> <input type="text" class="word-input lahu-required" data-verse="5" data-position="2" placeholder="คำที่ 2 (ลหุ)"> <input type="text" class="word-input lahu-required" data-verse="5" data-position="3" placeholder="คำที่ 3 (ลหุ)"> <input type="text" class="word-input kru-required samphus-send" data-verse="5" data-position="4" data-samphus="send" placeholder="คำที่ 4 (ครุ-ส่ง)">
+     </div>
+     <div class="verse-feedback" id="verse5-feedback"></div>
+     <div class="samphus-feedback" id="samphus5-feedback"></div>
+    </div>
+    <div class="verse-section">
+     <div class="verse-header"><span class="verse-title">วรรคที่ 6 (4 คำ)</span>
+      <div class="pattern-display"><span class="syllable kru">ครุ (รับ)</span> <span class="syllable lahu">ลหุ</span> <span class="syllable lahu">ลหุ</span> <span class="syllable kru">ครุ (รับ)</span>
+      </div>
+     </div>
+     <div class="word-inputs"><input type="text" class="word-input kru-required samphus-receive" data-verse="6" data-position="1" data-samphus="receive" placeholder="คำที่ 1 (ครุ-รับ)"> <input type="text" class="word-input lahu-required" data-verse="6" data-position="2" placeholder="คำที่ 2 (ลหุ)"> <input type="text" class="word-input lahu-required" data-verse="6" data-position="3" placeholder="คำที่ 3 (ลหุ)"> <input type="text" class="word-input kru-required samphus-receive" data-verse="6" data-position="4" data-samphus="receive" placeholder="คำที่ 4 (ครุ-รับ)">
+     </div>
+     <div class="verse-feedback" id="verse6-feedback"></div>
+     <div class="samphus-feedback" id="samphus6-feedback"></div>
+    </div>
+    <div class="verse-section">
+     <div class="verse-header"><span class="verse-title">วรรคที่ 7 (4 คำ)</span>
+      <div class="pattern-display"><span class="syllable kru">ครุ</span> <span class="syllable lahu">ลหุ</span> <span class="syllable lahu">ลหุ</span> <span class="syllable kru">ครุ (รับ)</span>
+      </div>
+     </div>
+     <div class="word-inputs"><input type="text" class="word-input kru-required" data-verse="7" data-position="1" placeholder="คำที่ 1 (ครุ)"> <input type="text" class="word-input lahu-required" data-verse="7" data-position="2" placeholder="คำที่ 2 (ลหุ)"> <input type="text" class="word-input lahu-required" data-verse="7" data-position="3" placeholder="คำที่ 3 (ลหุ)"> <input type="text" class="word-input kru-required samphus-receive" data-verse="7" data-position="4" data-samphus="receive" placeholder="คำที่ 4 (ครุ-รับ)">
+     </div>
+     <div class="verse-feedback" id="verse7-feedback"></div>
+     <div class="samphus-feedback" id="samphus7-feedback"></div>
+    </div>
+    <div class="verse-section">
+     <div class="verse-header"><span class="verse-title">วรรคที่ 8 (4 คำ)</span>
+      <div class="pattern-display"><span class="syllable kru">ครุ</span> <span class="syllable lahu">ลหุ</span> <span class="syllable lahu">ลหุ</span> <span class="syllable kru">ครุ</span>
+      </div>
+     </div>
+     <div class="word-inputs"><input type="text" class="word-input kru-required" data-verse="8" data-position="1" placeholder="คำที่ 1 (ครุ)"> <input type="text" class="word-input lahu-required" data-verse="8" data-position="2" placeholder="คำที่ 2 (ลหุ)"> <input type="text" class="word-input lahu-required" data-verse="8" data-position="3" placeholder="คำที่ 3 (ลหุ)"> <input type="text" class="word-input kru-required" data-verse="8" data-position="4" placeholder="คำที่ 4 (ครุ)">
+     </div>
+     <div class="verse-feedback" id="verse8-feedback"></div>
+    </div>
+    <div class="result-section">
+     <h2 class="result-title">ผลลัพธ์</h2>
+     <div class="result-text" id="result-text">
+      กรุณากรอกคำในแต่ละวรรคเพื่อดูผลลัพธ์
+     </div><button id="copy-button" class="copy-button" style="margin-top: 20px; padding: 12px 24px; background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.3); border-radius: 8px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px;"> 📋 คัดลอก (Plain Text) </button>
+     <div class="copy-instruction" style="margin-top: 15px; color: rgba(255,255,255,0.7); font-size: 0.9rem; text-align: center;">
+      💡 หรือลากคลุมข้อความแล้วคัดลอกไปใช้งาน
+     </div>
+    </div>
+    
+    <div class="visitor-counter">
+        <span id="busuanzi_container_site_pv">
+            จำนวนผู้เข้าชมทั้งหมด <span id="busuanzi_value_site_pv" class="visitor-count-number">...</span> ครั้ง
+        </span>
+    </div>
+    
+   </main>
+  </div>
+  <script>
+        // แม่แบบฉันทลักษณ์มาณวกฉันท์ ๘
+        const versePatterns = [
+            { verse: 1, pattern: ['ครุ', 'ลหุ', 'ลหุ', 'ครุ'] },
+            { verse: 2, pattern: ['ครุ', 'ลหุ', 'ลหุ', 'ครุ'] },
+            { verse: 3, pattern: ['ครุ', 'ลหุ', 'ลหุ', 'ครุ'] },
+            { verse: 4, pattern: ['ครุ', 'ลหุ', 'ลหุ', 'ครุ'] },
+            { verse: 5, pattern: ['ครุ', 'ลหุ', 'ลหุ', 'ครุ'] },
+            { verse: 6, pattern: ['ครุ', 'ลหุ', 'ลหุ', 'ครุ'] },
+            { verse: 7, pattern: ['ครุ', 'ลหุ', 'ลหุ', 'ครุ'] },
+            { verse: 8, pattern: ['ครุ', 'ลหุ', 'ลหุ', 'ครุ'] }
+        ];
+
+        // กฎสัมผัสมาณวกฉันท์ ๘
+        const samphusConnections = [
+            // บทที่ 1
+            { send: { verse: 1, position: 4 }, receive: { verse: 2, position: 1 } },
+            { send: { verse: 2, position: 4 }, receive: { verse: 3, position: 4 } },
+            
+            // ข้ามบท (บทที่ 1 → บทที่ 2)
+            { send: { verse: 4, position: 4 }, receive: { verse: 6, position: 4 } },
+            
+            // บทที่ 2
+            { send: { verse: 5, position: 4 }, receive: { verse: 6, position: 1 } },
+            { send: { verse: 6, position: 4 }, receive: { verse: 7, position: 4 } }
+        ];
+
+        // คำพิเศษที่เป็นลหุ
+        const specialLahuWords = ['ก็', 'บ่', 'ณ', 'ธ'];
+
+        // สระเสียงสั้น (ลหุ)
+        const shortVowels = [
+            'อะ', 'อิ', 'อึ', 'อุ', 'เอะ', 'แอะ', 'โอะ', 'เอาะ',
+            'ะ', 'ิ', 'ึ', 'ุ', 'เ-ะ', 'แ-ะ', 'โ-ะ', 'เ-าะ', 'ฤ'
+        ];
+
+        // ฟังก์ชันลบวรรณยุกต์
+        function removeToneMarks(word) {
+            return word.replace(/[่้๊๋]/g, '');
+        }
+
+        // ฟังก์ชันจัดการอักษรนำ
+        function processLeadingConsonants(word) {
+            const anamYWords = ['อย่า', 'อยู่', 'อย่าง', 'อยาก'];
+            for (let anamWord of anamYWords) {
+                if (word.startsWith(anamWord.replace(/[่้๊๋์]/g, ''))) {
+                   return 'ย' + word.substring(2);
+                }
+            }
+            
+            if (word.length >= 2 && word.charAt(0) === 'ห') {
+                const secondChar = word.charAt(1);
+                const leadingConsonants = ['ง', 'ย', 'ญ', 'ร', 'น', 'ล', 'ม', 'ว'];
+                
+                if (leadingConsonants.includes(secondChar)) {
+                   return word.substring(1);
+                }
+            }
+            return word;
+        }
+
+        // ฟังก์ชันตรวจสอบตัวสะกด (Updated)
+        function hasEndingConsonant(word) {
+            const cleanWord = word.replace(/[่้๊๋์]/g, '');
+            const processedWord = processLeadingConsonants(cleanWord);
+            const finalConsonants = ["ก", "ข", "ค", "ฆ", "จ", "ช", "ซ", "ฌ", "ญ", "ด", "ต", "ถ", "ท", "ธ", "ศ", "ษ", "ส", "ฏ", "ฐ", "บ", "ป", "ผ", "ฝ", "พ", "ฟ", "ภ", "น", "ณ", "ร", "ล", "ฬ", "ม", "ย", "ว", "ง"];
+            
+            const lastChar = processedWord.charAt(processedWord.length - 1);
+            
+            if (finalConsonants.includes(lastChar)) {
+                if (processedWord.length === 1) return false; 
+                const beforeLast = processedWord.charAt(processedWord.length - 2);
+                if ("่้๊๋์".includes(beforeLast)) return false;
+                return true;
+            }
+            return false;
+        }
+
+        // ฟังก์ชันตรวจสอบสระเสียงสั้น
+        function hasShortVowel(word) {
+            // ตรวจสอบสระที่มีรูปแบบพิเศษ
+            if (word.includes('ะ')) return true;
+            if (word.match(/เ.{1,2}ะ/)) return true;
+            if (word.match(/แ.{1,2}ะ/)) return true;
+            if (word.match(/โ.{1,2}ะ/)) return true;
+            if (word.match(/เ.{1,2}าะ/)) return true;
+            
+            // ตรวจสอบสระสั้นอื่นๆ รวมทั้ง ฤ
+            const shortVowelMarks = ['ิ', 'ึ', 'ุ', 'ฤ'];
+            return shortVowelMarks.some(vowel => word.includes(vowel));
+        }
+
+        // ฟังก์ชันตรวจสอบพยัญชนะตัวเดียว
+        function isSingleConsonant(word) {
+            if (!word || word.trim() === '') return false;
+            
+            word = word.trim();
+            // ลบวรรณยุกต์
+            word = removeToneMarks(word);
+            
+            // ตรวจสอบว่าเป็นพยัญชนะตัวเดียวหรือไม่
+            const consonants = 'กขฃคฅฆงจฉชซฌญฎฏฐฑฒณดตถทธนบปผฝพฟภมยรลวศษสหฬอฮ';
+            
+            return word.length === 1 && consonants.includes(word);
+        }
+
+        // ฟังก์ชันหลักในการวิเคราะห์ครุ-ลหุ (Updated logic for Het/Chat)
+        function isLahu(word) {
+            if (!word || word.trim() === '') return false;
+            word = word.trim();
+            if (!word) return false;
+ 
+            const cleanWord = word.replace(/[่้๊๋์]/g, '');
+            const processedWord = processLeadingConsonants(cleanWord);
+ 
+            const specialLahu = ["ก็", "บ่", "ณ", "ธ"];
+            if (specialLahu.includes(word)) return true;
+            
+            // ตรวจสอบพยัญชนะตัวเดียว (เป็นลหุ)
+            if (isSingleConsonant(word)) return true;
+ 
+            if (processedWord.includes("อำ") || processedWord.includes("ไอ") || processedWord.includes("ใอ") || processedWord.includes("เอา")) {
+                return false;
+            }
+ 
+            if (hasEndingConsonant(word)) {
+                return false; 
+            }
+
+            // ** ตรรกะใหม่: ตรวจสอบสระเสียงยาวที่บังคับให้เป็นครุ ก่อนตรวจสอบสระเสียงสั้น **
+            const forceKruLongVowels = ["า", "ี", "ื", "ู", "เ", "แ", "โ", "อ"];
+            const shorteners = ["ะ", "็"]; 
+
+            let hasLongVowel = false;
+            for (let v of forceKruLongVowels) {
+                if (processedWord.includes(v)) {
+                    hasLongVowel = true;
+                    break;
+                }
+            }
+
+            if (hasLongVowel) {
+                let isShortened = false;
+                for (let s of shorteners) {
+                    if (processedWord.includes(s)) {
+                        isShortened = true;
+                        break;
+                    }
+                }
+                if (processedWord.includes("เอาะ") || processedWord.includes("เออะ") || processedWord.includes("อัวะ") || processedWord.includes("เอียะ") || processedWord.includes("เอือะ")) {
+                    isShortened = true;
+                }
+
+                if (!isShortened) {
+                    // มีสระเสียงยาว และไม่ถูกทำให้สั้นลง -> เป็นครุ (เช่น เหตุ, ชาติ, ญาติ)
+                    return false; 
+                }
+            }
+            
+            // ลหุ = สระเสียงสั้น และ ไม่มีตัวสะกด
+            const isShortVowel = hasShortVowel(processedWord);
+            
+            return isShortVowel;
+        }
+
+        // ฟังก์ชันตรวจสอบสระ ไอ
+        function hasAiVowel(word) {
+            return word.includes('ไ') || word.includes('ใ') || 
+                   word.includes('าย') || word.includes('วย');
+        }
+
+        // ฟังก์ชันหาเสียงสระ
+        function getVowelSound(word) {
+            // สระ ไอ
+            if (hasAiVowel(word)) return 'ไอ';
+            
+            // สระอื่นๆ (ตัวอย่างเบื้องต้น)
+            if (word.includes('า') || word.includes('ะ')) return 'อา';
+            if (word.includes('ี') || word.includes('ิ')) return 'อี';
+            if (word.includes('ู') || word.includes('ุ')) return 'อู';
+            if (word.includes('เ') && word.includes('ะ')) return 'เอะ';
+            if (word.includes('เ')) return 'เอ';
+            if (word.includes('แ') && word.includes('ะ')) return 'แอะ';
+            if (word.includes('แ')) return 'แอ';
+            if (word.includes('โ') && word.includes('ะ')) return 'โอะ';
+            if (word.includes('โ')) return 'โอ';
+            if (word.includes('ึ')) return 'เออ';
+            if (word.includes('ื')) return 'เออ';
+            if (word.includes('ำ')) return 'อำ';
+            if (word.includes('ฤ')) return 'ฤ';
+            
+            return 'อื่นๆ';
+        }
+
+        // ฟังก์ชันหาหมวดพยัญชนะตัวสะกด
+        function getFinalConsonantGroup(word) {
+            if (word.length === 0) return 'ไม่มีตัวสะกด';
+            
+            const lastChar = word[word.length - 1];
+            
+            // หมวดเกก (ก ข ค ฆ)
+            if ('กขคฆ'.includes(lastChar)) return 'เกก';
+            
+            // หมวดเกง (ง)
+            if (lastChar === 'ง') return 'เกง';
+            
+            // หมวดเจน (จ ช ซ ฌ ญ ฎ ฏ ฐ ฑ ฒ ณ ด ต ถ ท ธ น)
+            if ('จชซฌญฎฏฐฑฒณดตถทธน'.includes(lastChar)) return 'เจน';
+            
+            // หมวดเบม (บ ป ผ ฝ พ ฟ ภ ม)
+            if ('บปผฝพฟภม'.includes(lastChar)) return 'เบม';
+            
+            // หมวดเรว (ร ล ว)
+            if ('รลว'.includes(lastChar)) return 'เรว';
+            
+            // หมวดเสห (ส ศ ษ ห)
+            if ('สศษห'.includes(lastChar)) return 'เสห';
+            
+            // หมวดเอย (ย)
+            if (lastChar === 'ย') return 'เอย';
+            
+            return 'อื่นๆ';
+        }
+
+        // ฟังก์ชันหาเสียงและหมวดตัวสะกด (Updated to use robust processLeadingConsonants)
+        function getVowelAndFinalSound(word) {
+            const cleanWord = word.replace(/[่้๊๋์]/g, '');
+            const processedWord = processLeadingConsonants(cleanWord);
+            
+            if (hasAiVowel(processedWord)) {
+                return { vowel: 'ไอ', finalGroup: 'เกย' };
+            }
+            
+            return { 
+                vowel: getVowelSound(processedWord), 
+                finalGroup: getFinalConsonantGroup(processedWord) 
+            };
+        }
+
+        // ฟังก์ชันตรวจสอบสัมผัส
+        function checkSamphus(word1, word2) {
+            if (!word1 || !word2) return false;
+            const sound1 = getVowelAndFinalSound(word1.trim());
+            const sound2 = getVowelAndFinalSound(word2.trim());
+            return sound1.vowel === sound2.vowel && 
+                   sound1.finalGroup === sound2.finalGroup;
+        }
+
+        // ฟังก์ชันลบ feedback สัมผัสเก่า
+        function clearSamphusFeedback(input) {
+            if (!input) return;
+            const feedbackElement = input.parentElement.parentElement.querySelector('.samphus-feedback');
+            if (feedbackElement) {
+                feedbackElement.textContent = '';
+                feedbackElement.className = 'samphus-feedback';
+            }
+        }
+
+        // ฟังก์ชันแสดง feedback สัมผัส
+        function showSamphusFeedback(input, partnerWord, hasSamphus, type) {
+            if (!input) return;
+            const feedbackElement = input.parentElement.parentElement.querySelector('.samphus-feedback');
+            if (!feedbackElement) return;
+            
+            const word = input.value.trim();
+            if (hasSamphus) {
+                feedbackElement.textContent = `✅ สัมผัสถูกต้อง: "${word}" ${type}สัมผัสกับ "${partnerWord}"`;
+                feedbackElement.className = 'samphus-feedback samphus-correct';
+            } else {
+                feedbackElement.textContent = `❌ ไม่สัมผัส: "${word}" ไม่${type}สัมผัสกับ "${partnerWord}"`;
+                feedbackElement.className = 'samphus-feedback samphus-incorrect';
+            }
+        }
+
+        // ฟังก์ชันแสดง feedback รอคู่
+        function showPendingFeedback(input) {
+            if (!input) return;
+            const feedbackElement = input.parentElement.parentElement.querySelector('.samphus-feedback');
+            if (!feedbackElement) return;
+            
+            const samplusType = input.dataset.samphus;
+            const typeText = samplusType === 'send' ? 'ส่ง' : 'รับ';
+            feedbackElement.textContent = `⏳ รอคำคู่สัมผัส (${typeText})`;
+            feedbackElement.className = 'samphus-feedback samphus-pending';
+        }
+
+        // ฟังก์ชันตรวจสอบสัมผัสทั้งหมด
+        function checkAllSamphus() {
+            samphusConnections.forEach(connection => {
+                const sendInput = document.querySelector(
+                    `[data-verse="${connection.send.verse}"][data-position="${connection.send.position}"]`
+                );
+                const receiveInput = document.querySelector(
+                    `[data-verse="${connection.receive.verse}"][data-position="${connection.receive.position}"]`
+                );
+                
+                // ลบ feedback เก่า
+                clearSamphusFeedback(sendInput);
+                clearSamphusFeedback(receiveInput);
+                
+                const sendWord = sendInput?.value.trim();
+                const receiveWord = receiveInput?.value.trim();
+                
+                if (sendWord && receiveWord) {
+                    const hasSamphus = checkSamphus(sendWord, receiveWord);
+                    showSamphusFeedback(sendInput, receiveWord, hasSamphus, 'ส่ง');
+                    showSamphusFeedback(receiveInput, sendWord, hasSamphus, 'รับ');
+                } else if (sendWord || receiveWord) {
+                    if (sendWord) showPendingFeedback(sendInput);
+                    if (receiveWord) showPendingFeedback(receiveInput);
+                }
+            });
+        }
+
+        // ฟังก์ชันตรวจสอบคำ
+        function checkWord(input, expectedType) {
+            if (!input || input.trim() === '') return null;
+            
+            const isWordLahu = isLahu(input);
+            const expectedLahu = expectedType === 'ลหุ';
+            
+            return isWordLahu === expectedLahu;
+        }
+
+        // ฟังก์ชันอัปเดต feedback ของแต่ละวรรค
+        function updateVerseFeedback(verseNumber) {
+            const inputs = document.querySelectorAll(`[data-verse="${verseNumber}"]`);
+            const feedbackElement = document.getElementById(`verse${verseNumber}-feedback`);
+            const pattern = versePatterns[verseNumber - 1].pattern;
+            
+            let correctCount = 0;
+            let totalWords = 0;
+            let hasEmptyFields = false;
+            let singleConsonantWarnings = [];
+            
+            inputs.forEach((input, index) => {
+                const word = input.value.trim();
+                if (word === '') {
+                    hasEmptyFields = true;
+                    input.classList.remove('correct', 'incorrect');
+                    return;
+                }
+                
+                totalWords++;
+                const expectedType = pattern[index];
+                const isCorrect = checkWord(word, expectedType);
+                
+                // ตรวจสอบพยัญชนะตัวเดียวในช่องครุ (แต่ไม่เตือนในช่องลหุ)
+                if (expectedType === 'ครุ' && isSingleConsonant(word)) {
+                    input.classList.remove('correct');
+                    input.classList.add('incorrect');
+                    singleConsonantWarnings.push(`คำที่ ${index + 1}`);
+                } else if (isCorrect) {
+                    correctCount++;
+                    input.classList.remove('incorrect');
+                    input.classList.add('correct');
+                } else {
+                    input.classList.remove('correct');
+                    input.classList.add('incorrect');
+                }
+            });
+            
+            // อัปเดต feedback
+            if (hasEmptyFields && totalWords === 0) {
+                feedbackElement.textContent = '';
+                feedbackElement.className = 'verse-feedback';
+            } else if (singleConsonantWarnings.length > 0) {
+                feedbackElement.textContent = `⚠️ ${singleConsonantWarnings.join(', ')} เป็นพยัญชนะตัวเดียว (ลหุ) ไม่ใช่ครุ`;
+                feedbackElement.className = 'verse-feedback error';
+            } else if (correctCount === 4) {
+                feedbackElement.textContent = '✅ วรรคนี้ถูกต้องแล้ว!';
+                feedbackElement.className = 'verse-feedback success';
+            } else if (totalWords === 4) {
+                feedbackElement.textContent = `❌ ผิด ${4 - correctCount} คำ - กรุณาตรวจสอบครุ-ลหุให้ตรงตามแม่แบบ`;
+                feedbackElement.className = 'verse-feedback error';
+            } else {
+                feedbackElement.textContent = `⚠️ กรอกครบ 4 คำ (ถูก ${correctCount}/${totalWords} คำ)`;
+                feedbackElement.className = 'verse-feedback partial';
+            }
+        }
+
+        // ฟังก์ชันอัปเดตผลลัพธ์รวม
+        function updateResult() {
+            const resultElement = document.getElementById('result-text');
+            const copyButton = document.getElementById('copy-button');
+            let hasContent = false;
+            let resultHTML = '';
+            
+            // วนลูปแต่ละวรรค (ตอนนี้มี 8 วรรค)
+            for (let verse = 1; verse <= 8; verse++) {
+                const inputs = document.querySelectorAll(`[data-verse="${verse}"]`);
+                const words = [];
+                
+                inputs.forEach(input => {
+                    const word = input.value.trim();
+                    words.push(word || '___'); // แสดง ___ ถ้ายังไม่กรอก
+                });
+                
+                // ตรวจสอบว่ามีคำที่กรอกแล้วหรือไม่
+                const hasWords = words.some(w => w !== '___');
+                if (hasWords) hasContent = true;
+                
+                // สร้าง HTML สำหรับแต่ละวรรค (คำชิดกันไม่มีช่องว่าง)
+                resultHTML += `
+                    <div class="result-verse" style="margin-bottom: 12px; padding: 8px 0;">
+                        <span class="verse-line" style="font-size: 18px; font-weight: 500; color: white; letter-spacing: 0.5px;">
+                            ${words.join('')}
+                        </span>
+                    </div>
+                `;
+            }
+            
+            if (!hasContent) {
+                resultElement.innerHTML = '<div style="color: rgba(255,255,255,0.8); text-align: center; padding: 20px;">กรุณากรอกคำในแต่ละวรรคเพื่อดูผลลัพธ์</div>';
+                copyButton.disabled = true;
+            } else {
+                resultElement.innerHTML = resultHTML;
+                copyButton.disabled = false;
+            }
+        }
+
+        // ฟังก์ชันคัดลอกข้อความ Plain Text
+        function copyPlainText() {
+            const copyButton = document.getElementById('copy-button');
+            let plainText = '';
+            
+            // สร้างข้อความ Plain Text
+            for (let verse = 1; verse <= 8; verse++) {
+                const inputs = document.querySelectorAll(`[data-verse="${verse}"]`);
+                const words = [];
+                
+                inputs.forEach(input => {
+                    const word = input.value.trim();
+                    if (word) words.push(word);
+                });
+                
+                if (words.length > 0) {
+                    plainText += words.join('') + '\n';
+                }
+            }
+            
+            if (plainText.trim() === '') {
+                // แสดงข้อความแจ้งเตือนแบบ inline แทน alert
+                const originalText = copyButton.innerHTML;
+                copyButton.innerHTML = '⚠️ กรุณากรอกคำก่อน';
+                copyButton.style.background = 'rgba(255, 193, 7, 0.8)';
+                
+                setTimeout(() => {
+                    copyButton.innerHTML = originalText;
+                    copyButton.style.background = 'rgba(255,255,255,0.2)';
+                }, 2000);
+                return;
+            }
+            
+            const textToCopy = plainText.trim();
+            
+            // ลอง Modern API ก่อน, ถ้าไม่ได้ใช้ Fallback
+            if (navigator.clipboard && navigator.clipboard.writeText) {
+                navigator.clipboard.writeText(textToCopy).then(() => {
+                    showCopySuccess(copyButton);
+                }).catch(() => {
+                    // Fallback ถ้า Modern API ล้มเหลว
+                    fallbackCopy(textToCopy, copyButton);
+                });
+            } else {
+                // Fallback สำหรับ browser เก่าหรือ non-HTTPS
+                fallbackCopy(textToCopy, copyButton);
+            }
+        }
+
+        function fallbackCopy(text, button) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.top = '0';
+            textArea.style.left = '0';
+            textArea.style.opacity = '0';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showCopySuccess(button);
+                } else {
+                    showCopyError(button);
+                }
+            } catch (err) {
+                showCopyError(button);
+            }
+            
+            document.body.removeChild(textArea);
+        }
+
+        function showCopySuccess(button) {
+            const originalText = button.innerHTML;
+            button.innerHTML = '✅ คัดลอกแล้ว!';
+            button.style.background = 'rgba(40, 167, 69, 0.8)';
+            
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.style.background = 'rgba(255,255,255,0.2)';
+            }, 2000);
+        }
+
+        function showCopyError(button) {
+            const originalText = button.innerHTML;
+            button.innerHTML = '❌ ไม่สามารถคัดลอกได้';
+            button.style.background = 'rgba(220, 53, 69, 0.8)';
+            
+            setTimeout(() => {
+                button.innerHTML = originalText;
+                button.style.background = 'rgba(255,255,255,0.2)';
+            }, 2000);
+        }
+
+        // Event listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            const allInputs = document.querySelectorAll('.word-input');
+            const copyButton = document.getElementById('copy-button');
+            
+            allInputs.forEach(input => {
+                // ใช้ทั้ง input และ keyup เพื่อให้แน่ใจว่า real-time
+                input.addEventListener('input', function() {
+                    const verse = parseInt(this.dataset.verse);
+                    updateVerseFeedback(verse);
+                    updateResult(); // ต้องเรียกทุกครั้งที่พิมพ์
+                    checkAllSamphus(); // ตรวจสอบสัมผัสทุกครั้งที่พิมพ์
+                });
+                
+                // เพิ่ม keyup เป็น backup
+                input.addEventListener('keyup', function() {
+                    const verse = parseInt(this.dataset.verse);
+                    updateVerseFeedback(verse);
+                    updateResult();
+                    checkAllSamphus(); // ตรวจสอบสัมผัสทุกครั้งที่พิมพ์
+                });
+            });
+            
+            // Event listener สำหรับปุ่มคัดลอก
+            copyButton.addEventListener('click', copyPlainText);
+            
+            // เรียก updateResult ครั้งแรกเมื่อโหลดหน้า
+            updateResult();
+        });
+
+        // Elements SDK Configuration
+        const defaultConfig = {
+            app_title: "เครื่องมือช่วยแต่งมาณวกฉันท์ ๘",
+            developer_name: "พัฒนาโดย ครูนนทพัทธ์ หิรัญเรือง",
+            pattern_description: "มาณวกฉันท์ ๘ มี 4 วรรค วรรคละ 4 คำ รวม 16 คำ/บท"
+        };
+
+        async function onConfigChange(config) {
+            const appTitle = config.app_title || defaultConfig.app_title;
+            const developerName = config.developer_name || defaultConfig.developer_name;
+            const patternDescription = config.pattern_description || defaultConfig.pattern_description;
+
+            document.getElementById('app-title').textContent = appTitle;
+            document.getElementById('developer-name').textContent = developerName;
+            document.getElementById('pattern-description').textContent = patternDescription;
+        }
+
+        function mapToCapabilities(config) {
+            return {
+                recolorables: [],
+                borderables: [],
+                fontEditable: undefined,
+                fontSizeable: undefined
+            };
+        }
+
+        function mapToEditPanelValues(config) {
+            return new Map([
+                ["app_title", config.app_title || defaultConfig.app_title],
+                ["developer_name", config.developer_name || defaultConfig.developer_name],
+                ["pattern_description", config.pattern_description || defaultConfig.pattern_description]
+            ]);
+        }
+
+        // Initialize Elements SDK
+        if (window.elementSdk) {
+            window.elementSdk.init({
+                defaultConfig,
+                onConfigChange,
+                mapToCapabilities,
+                mapToEditPanelValues
+            });
+        }
+    </script>
+ </body>
+</html>
