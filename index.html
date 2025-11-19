@@ -3,11 +3,11 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>เครื่องมือช่วยแต่งมาณวกฉันท์ ๘</title>
+  <title>เครื่องมือช่วยแต่งมาณวกฉันท์ ๘ (Auto-Save + Counter)</title>
   
-  <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-  
+  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
   <script src="/_sdk/element_sdk.js"></script>
+  
   <style>
         body {
             box-sizing: border-box;
@@ -16,6 +16,7 @@
             padding: 20px;
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100%;
+            padding-bottom: 50px;
         }
 
         .container {
@@ -25,7 +26,7 @@
             border-radius: 15px;
             box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
             overflow: hidden;
-            padding-bottom: 10px; /* เพิ่ม padding สำหรับ counter */
+            padding-bottom: 10px;
         }
 
         .header {
@@ -65,6 +66,14 @@
 
         .content {
             padding: 30px;
+        }
+
+        /* Top Controls */
+        .top-controls {
+            display: flex;
+            justify-content: flex-end;
+            margin-bottom: 20px;
+            padding: 0 30px;
         }
 
         .pattern-info {
@@ -155,6 +164,7 @@
             font-family: inherit;
             transition: all 0.3s ease;
             background: white;
+            width: 100%; /* Ensure full width within grid cell */
         }
 
         .word-input:focus {
@@ -213,6 +223,13 @@
             font-weight: 600;
             margin-bottom: 20px;
         }
+        
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 20px;
+        }
 
         .result-text {
             background: rgba(255, 255, 255, 0.1);
@@ -262,6 +279,21 @@
             border: 1px solid #ffeaa7;
         }
 
+        .copy-button {
+            padding: 12px 24px;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+
         .copy-button:hover {
             background: rgba(255,255,255,0.3);
             border-color: rgba(255,255,255,0.5);
@@ -279,19 +311,48 @@
             transform: none;
         }
         
-        /* Visitor Counter Style */
-        .visitor-counter {
-            margin-top: 30px;
-            text-align: center;
-            font-size: 13px;
-            color: #64748b;
-            border-top: 1px solid #e2e8f0;
-            padding-top: 20px;
+        .reset-button {
+           background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+           border-radius: 8px;
+            font-size: 1rem;
+           font-weight: 500;
+            cursor: pointer;
+           transition: all 0.3s ease;
+            display: inline-flex;
+           align-items: center;
+            gap: 8px;
         }
         
-        .visitor-count-number {
-            font-weight: bold;
-            color: #667eea;
+        .reset-button:hover {
+            background: #c0392b;
+            transform: translateY(-2px);
+             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        
+        .reset-button:active {
+             transform: translateY(0);
+        }
+        
+        /* Visitor Counter Style */
+        .footer-counter {
+            margin-top: 40px;
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #e2e8f0;
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        
+        .counter-container {
+            margin-top: 10px;
+            display: inline-block;
+            padding: 5px 10px;
+            background: white;
+            border-radius: 5px;
+            border: 1px solid #eee;
         }
 
         @media (max-width: 768px) {
@@ -311,6 +372,10 @@
             .content {
                 padding: 20px;
             }
+            
+            .top-controls {
+                padding: 0 20px;
+            }
 
             .verse-header {
                 flex-direction: column;
@@ -325,11 +390,19 @@
             .word-inputs {
                 grid-template-columns: 1fr;
             }
+            
+            .button-group {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .copy-button, .reset-button {
+                justify-content: center;
+                width: 100%;
+            }
         }
     </style>
   <style>@view-transition { navigation: auto; }</style>
-  <script src="/_sdk/data_sdk.js" type="text/javascript"></script>
-  <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
  </head>
  <body>
   <div class="container">
@@ -345,6 +418,11 @@
                             border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.15);
                             transition: transform 0.3s ease, box-shadow 0.3s ease;" onmouseover="this.style.transform='translateY(-2px) scale(1.02)'; this.style.boxShadow='0 6px 20px rgba(0,0,0,0.25)'" onmouseout="this.style.transform='translateY(0) scale(1)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.15)'" onerror="this.style.display='none'; this.alt='ภาพไม่สามารถโหลดได้';"> </a>
    </div>
+   
+   <div class="top-controls">
+       <button class="reset-button" onclick="resetData()">🗑️ เคลียร์กล่องข้อความ</button>
+   </div>
+
    <main class="content">
     <div class="pattern-info">
      <h3>ข้อมูลควรรู้</h3>
@@ -439,21 +517,31 @@
      <h2 class="result-title">ผลลัพธ์</h2>
      <div class="result-text" id="result-text">
       กรุณากรอกคำในแต่ละวรรคเพื่อดูผลลัพธ์
-     </div><button id="copy-button" class="copy-button" style="margin-top: 20px; padding: 12px 24px; background: rgba(255,255,255,0.2); color: white; border: 2px solid rgba(255,255,255,0.3); border-radius: 8px; font-size: 1rem; font-weight: 500; cursor: pointer; transition: all 0.3s ease; display: inline-flex; align-items: center; gap: 8px;"> 📋 คัดลอก (Plain Text) </button>
+     </div>
+     <div class="button-group">
+        <button class="reset-button" onclick="resetData()">🗑️ ล้างข้อมูล</button>
+        <button id="copy-button" class="copy-button" onclick="copyPlainText()"> 📋 คัดลอก (Plain Text) </button>
+     </div>
      <div class="copy-instruction" style="margin-top: 15px; color: rgba(255,255,255,0.7); font-size: 0.9rem; text-align: center;">
       💡 หรือลากคลุมข้อความแล้วคัดลอกไปใช้งาน
      </div>
     </div>
     
-    <div class="visitor-counter">
-        <span id="busuanzi_container_site_pv">
-            จำนวนผู้เข้าชมทั้งหมด <span id="busuanzi_value_site_pv" class="visitor-count-number">...</span> ครั้ง
-        </span>
+    <div class="footer-counter">
+       <p>จำนวนผู้เข้าชม</p>
+       <div class="counter-container">
+           <a href="https://www.hitwebcounter.com" target="_blank">
+           <img src="https://hitwebcounter.com/counter/counter.php?page=11837598&style=0006&nbdigits=5&type=page&initCount=0" title="Free Counter" Alt="web counter" border="0" /></a>
+       </div>
+       <p style="font-size: 12px; margin-top: 5px; color: #95a5a6;">(ตัวนับฟรีจาก HitWebCounter)</p>
     </div>
     
    </main>
   </div>
   <script>
+        // Storage Key
+        const STORAGE_KEY = 'manawak_chan_8_data';
+
         // แม่แบบฉันทลักษณ์มาณวกฉันท์ ๘
         const versePatterns = [
             { verse: 1, pattern: ['ครุ', 'ลหุ', 'ลหุ', 'ครุ'] },
@@ -969,48 +1057,101 @@
                 button.style.background = 'rgba(255,255,255,0.2)';
             }, 2000);
         }
+        
+        // --- LocalStorage Functions ---
+        function saveData() {
+            const inputs = document.querySelectorAll('.word-input');
+            const data = {};
+            
+            inputs.forEach(input => {
+                const key = `v${input.dataset.verse}_p${input.dataset.position}`;
+                data[key] = input.value;
+            });
+            
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        }
+        
+        function loadData() {
+            const savedJSON = localStorage.getItem(STORAGE_KEY);
+            if (!savedJSON) return;
+            
+            const data = JSON.parse(savedJSON);
+            const inputs = document.querySelectorAll('.word-input');
+            
+            inputs.forEach(input => {
+                const key = `v${input.dataset.verse}_p${input.dataset.position}`;
+                if (data[key]) {
+                    input.value = data[key];
+                    // Trigger validation to update UI (colors/feedback)
+                    const verse = parseInt(input.dataset.verse);
+                    updateVerseFeedback(verse);
+                }
+            });
+            
+            // Update result display and samphus after loading all data
+            updateResult();
+            checkAllSamphus();
+        }
+        
+        function resetData() {
+            if (confirm('คุณแน่ใจหรือไม่ว่าต้องการล้างข้อมูลทั้งหมด? การกระทำนี้ไม่สามารถย้อนกลับได้')) {
+                localStorage.removeItem(STORAGE_KEY);
+                
+                const inputs = document.querySelectorAll('.word-input');
+                inputs.forEach(input => {
+                    input.value = '';
+                    input.classList.remove('correct', 'incorrect');
+                });
+                
+                // Reset feedbacks
+                document.querySelectorAll('.verse-feedback').forEach(fb => {
+                    fb.textContent = '';
+                    fb.className = 'verse-feedback';
+                });
+                
+                document.querySelectorAll('.samphus-feedback').forEach(sf => {
+                    sf.textContent = '';
+                    sf.className = 'samphus-feedback';
+                });
+
+                updateResult();
+            }
+        }
 
         // Event listeners
         document.addEventListener('DOMContentLoaded', function() {
+            // Load saved data
+            loadData();
+            
             const allInputs = document.querySelectorAll('.word-input');
             const copyButton = document.getElementById('copy-button');
             
             allInputs.forEach(input => {
-                // ใช้ทั้ง input และ keyup เพื่อให้แน่ใจว่า real-time
+                // ใช้ input event เพื่อให้ real-time และ save ทันที
                 input.addEventListener('input', function() {
                     const verse = parseInt(this.dataset.verse);
                     updateVerseFeedback(verse);
-                    updateResult(); // ต้องเรียกทุกครั้งที่พิมพ์
-                    checkAllSamphus(); // ตรวจสอบสัมผัสทุกครั้งที่พิมพ์
-                });
-                
-                // เพิ่ม keyup เป็น backup
-                input.addEventListener('keyup', function() {
-                    const verse = parseInt(this.dataset.verse);
-                    updateVerseFeedback(verse);
                     updateResult();
-                    checkAllSamphus(); // ตรวจสอบสัมผัสทุกครั้งที่พิมพ์
+                    checkAllSamphus();
+                    saveData(); // Auto-save
                 });
             });
             
-            // Event listener สำหรับปุ่มคัดลอก
-            copyButton.addEventListener('click', copyPlainText);
-            
-            // เรียก updateResult ครั้งแรกเมื่อโหลดหน้า
-            updateResult();
+            // Event listener สำหรับปุ่มคัดลอก (หากไม่ได้ใส่ inline onclick)
+            // copyButton.addEventListener('click', copyPlainText);
         });
 
         // Elements SDK Configuration
-        const defaultConfig = {
+        const elementConfig = {
             app_title: "เครื่องมือช่วยแต่งมาณวกฉันท์ ๘",
             developer_name: "พัฒนาโดย ครูนนทพัทธ์ หิรัญเรือง",
             pattern_description: "มาณวกฉันท์ ๘ มี 4 วรรค วรรคละ 4 คำ รวม 16 คำ/บท"
         };
 
         async function onConfigChange(config) {
-            const appTitle = config.app_title || defaultConfig.app_title;
-            const developerName = config.developer_name || defaultConfig.developer_name;
-            const patternDescription = config.pattern_description || defaultConfig.pattern_description;
+            const appTitle = config.app_title || elementConfig.app_title;
+            const developerName = config.developer_name || elementConfig.developer_name;
+            const patternDescription = config.pattern_description || elementConfig.pattern_description;
 
             document.getElementById('app-title').textContent = appTitle;
             document.getElementById('developer-name').textContent = developerName;
@@ -1028,16 +1169,16 @@
 
         function mapToEditPanelValues(config) {
             return new Map([
-                ["app_title", config.app_title || defaultConfig.app_title],
-                ["developer_name", config.developer_name || defaultConfig.developer_name],
-                ["pattern_description", config.pattern_description || defaultConfig.pattern_description]
+                ["app_title", config.app_title || elementConfig.app_title],
+                ["developer_name", config.developer_name || elementConfig.developer_name],
+                ["pattern_description", config.pattern_description || elementConfig.pattern_description]
             ]);
         }
 
         // Initialize Elements SDK
         if (window.elementSdk) {
             window.elementSdk.init({
-                defaultConfig,
+                defaultConfig: elementConfig,
                 onConfigChange,
                 mapToCapabilities,
                 mapToEditPanelValues
