@@ -3,7 +3,7 @@
  <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>เครื่องมือช่วยแต่งมาณวกฉันท์ ๘ (Auto-Save + Counter)</title>
+  <title>เครื่องมือช่วยแต่งมาณวกฉันท์ ๘ V.1.5 (Ror-Han Fix + Samphus Sam)</title>
   
   <script src="https://cdn.tailwindcss.com" type="text/javascript"></script>
   <script src="/_sdk/element_sdk.js"></script>
@@ -164,7 +164,7 @@
             font-family: inherit;
             transition: all 0.3s ease;
             background: white;
-            width: 100%; /* Ensure full width within grid cell */
+            width: 100%;
         }
 
         .word-input:focus {
@@ -181,6 +181,14 @@
         .word-input.incorrect {
             border-color: #dc3545;
             background: #fff8f8;
+        }
+        
+        /* Samphus Input Highlights */
+        .word-input.samphus-send {
+            border: 3px solid #e67e22 !important;
+        }
+        .word-input.samphus-receive {
+            border: 3px solid #9b59b6 !important;
         }
 
         .verse-feedback {
@@ -242,15 +250,7 @@
             word-wrap: break-word;
         }
 
-        /* CSS สำหรับสัมผัส */
-        .samphus-send {
-            border: 3px solid #e67e22 !important;
-        }
-
-        .samphus-receive {
-            border: 3px solid #9b59b6 !important;
-        }
-
+        /* Samphus Feedback Styles */
         .samphus-feedback {
             margin-top: 10px;
             padding: 10px;
@@ -271,6 +271,12 @@
             background: #f8d7da;
             color: #721c24;
             border: 1px solid #f5c6cb;
+        }
+        
+        .samphus-warning {
+            background-color: #fff3cd;
+            border: 1px solid #ffeeba;
+            color: #856404;
         }
 
         .samphus-pending {
@@ -348,11 +354,20 @@
         
         .counter-container {
             margin-top: 10px;
-            display: inline-block;
-            padding: 5px 10px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 5px 15px;
             background: white;
-            border-radius: 5px;
-            border: 1px solid #eee;
+            border-radius: 20px;
+            border: 1px solid #cbd5e0;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .counter-badge {
+            font-weight: bold;
+            color: #2c3e50;
+            font-size: 16px;
         }
 
         @media (max-width: 768px) {
@@ -530,10 +545,10 @@
     <div class="footer-counter">
        <p>จำนวนผู้เข้าชม</p>
        <div class="counter-container">
-           <a href="https://www.hitwebcounter.com" target="_blank">
-           <img src="https://hitwebcounter.com/counter/counter.php?page=11837598&style=0006&nbdigits=5&type=page&initCount=0" title="Free Counter" Alt="web counter" border="0" /></a>
+           <span>👁️</span>
+           <span id="view-count" class="counter-badge">...</span>
        </div>
-       <p style="font-size: 12px; margin-top: 5px; color: #95a5a6;">(ตัวนับฟรีจาก HitWebCounter)</p>
+       <p style="font-size: 12px; margin-top: 5px; color: #95a5a6;">(Powered by CounterAPI)</p>
     </div>
     
    </main>
@@ -602,7 +617,7 @@
             return word;
         }
 
-        // ฟังก์ชันตรวจสอบตัวสะกด (Updated)
+        // ฟังก์ชันตรวจสอบตัวสะกด
         function hasEndingConsonant(word) {
             const cleanWord = word.replace(/[่้๊๋์]/g, '');
             const processedWord = processLeadingConsonants(cleanWord);
@@ -647,7 +662,7 @@
             return word.length === 1 && consonants.includes(word);
         }
 
-        // ฟังก์ชันหลักในการวิเคราะห์ครุ-ลหุ (Updated logic for Het/Chat)
+        // ฟังก์ชันหลักในการวิเคราะห์ครุ-ลหุ
         function isLahu(word) {
             if (!word || word.trim() === '') return false;
             word = word.trim();
@@ -717,7 +732,7 @@
             // สระ ไอ
             if (hasAiVowel(word)) return 'ไอ';
             
-            // สระอื่นๆ (ตัวอย่างเบื้องต้น)
+            // สระอื่นๆ
             if (word.includes('า') || word.includes('ะ')) return 'อา';
             if (word.includes('ี') || word.includes('ิ')) return 'อี';
             if (word.includes('ู') || word.includes('ุ')) return 'อู';
@@ -764,16 +779,94 @@
             
             return 'อื่นๆ';
         }
+        
+        // Function to get Initial Consonant Sound Group (Checking Homophones)
+        function getInitialConsonantGroup(word) {
+            if (!word) return '';
+            word = word.trim().replace(/[่้๊๋์]/g, '');
+            
+            let startIndex = 0;
+            if ("เแโใไ".includes(word.charAt(0))) {
+                startIndex = 1;
+            }
+            
+            if (startIndex >= word.length) return '';
+            
+            const char = word.charAt(startIndex);
+            
+            if ('ก'.includes(char)) return 'k';
+            if ('ขฃคฅฆ'.includes(char)) return 'kh';
+            if ('ง'.includes(char)) return 'ng';
+            if ('จ'.includes(char)) return 'j';
+            if ('ฉชฌ'.includes(char)) return 'ch';
+            if ('ซศษส'.includes(char)) return 's';
+            if ('ยญ'.includes(char)) return 'y';
+            if ('ฎด'.includes(char)) return 'd';
+            if ('ฏต'.includes(char)) return 't';
+            if ('ฐฑฒถทธ'.includes(char)) return 'th';
+            if ('ณน'.includes(char)) return 'n';
+            if ('บ'.includes(char)) return 'b';
+            if ('ป'.includes(char)) return 'p';
+            if ('ผพภฟฝ'.includes(char)) {
+                 if ('ฝฟ'.includes(char)) return 'f';
+                 return 'ph';
+            }
+            if ('ม'.includes(char)) return 'm';
+            if ('ร'.includes(char)) return 'r';
+            if ('ลฬ'.includes(char)) return 'l';
+            if ('ว'.includes(char)) return 'w';
+            if ('หฮ'.includes(char)) return 'h';
+            if ('อ'.includes(char)) return 'a';
+            
+            return char;
+        }
 
-        // ฟังก์ชันหาเสียงและหมวดตัวสะกด (Updated to use robust processLeadingConsonants)
+        // Check for homophones
+        function isHomophone(word1, word2) {
+             // Check rhyme
+             if (!checkSamphus(word1, word2)) return false;
+             // Check Initial Consonant
+             const init1 = getInitialConsonantGroup(word1);
+             const init2 = getInitialConsonantGroup(word2);
+             
+             return init1 === init2 && init1 !== '';
+        }
+
+        // ฟังก์ชันหาเสียงและหมวดตัวสะกด (Ror Han Fixed)
         function getVowelAndFinalSound(word) {
             const cleanWord = word.replace(/[่้๊๋์]/g, '');
             const processedWord = processLeadingConsonants(cleanWord);
+            
+            // --- FIX FOR ROR HAN (รร) ---
+            if (processedWord.endsWith("รรม")) {
+                return { vowel: 'อำ', finalGroup: 'กกา' }; 
+            }
+            if (processedWord.endsWith("รร") || processedWord.endsWith("รรณ")) {
+                return { vowel: 'อะ', finalGroup: 'กน' };
+            }
+            // ----------------------------
             
             if (hasAiVowel(processedWord)) {
                 return { vowel: 'ไอ', finalGroup: 'เกย' };
             }
             
+            // Convert standard finals to group names for internal check logic
+            // Note: This simplifies the checkSamphus logic by reusing existing functions
+            // In a full production app, we might unify getFinalConsonantGroup logic to return standard Thai Matrix (Kok, Kon, Kom, etc.)
+            // For now, we map standard logic:
+            const finalGroup = getFinalConsonantGroup(processedWord);
+            
+            // Mapping specific groups to generic sounds for rhyming 
+            // (This part can be expanded for strict Thai rhyme rules)
+            let simplifiedGroup = finalGroup;
+            if (['เกก'].includes(finalGroup)) simplifiedGroup = 'กก';
+            if (['เกง'].includes(finalGroup)) simplifiedGroup = 'กง';
+            if (['เจน', 'เสห', 'ด', 'ต', 'ถ', 'ท', 'ธ'].includes(finalGroup) || finalGroup === 'เจน' || finalGroup === 'เสห') {
+                 // Strictly 'Kod' (กด) mapping is complex, for this tool utilizing checking logic:
+                 // We will rely on the helper function `checkSamphus` below which compares these raw outputs.
+                 // To make it robust, let's standardize the output of this function for external use if needed.
+            }
+
             return { 
                 vowel: getVowelSound(processedWord), 
                 finalGroup: getFinalConsonantGroup(processedWord) 
@@ -785,8 +878,62 @@
             if (!word1 || !word2) return false;
             const sound1 = getVowelAndFinalSound(word1.trim());
             const sound2 = getVowelAndFinalSound(word2.trim());
-            return sound1.vowel === sound2.vowel && 
-                   sound1.finalGroup === sound2.finalGroup;
+            
+            // Special mapping for rhyme groups (simplification)
+            // Map distinct groups to standard Thai rhyme sections (Mae)
+            const getMae = (group) => {
+                 if (group === 'เกก') return 'กก';
+                 if (group === 'เกง') return 'กง';
+                 if (group === 'เบม') return 'กม'; // Usually 'm'
+                 if (group === 'เอย') return 'เกย';
+                 if (group === 'เรว') return 'เกอว'; // Usually 'w'
+                 if (group === 'เจน') return 'กน'; // Usually 'n'
+                 if (group === 'เสห') return 'กด'; // Usually 'd' but loose rhyme
+                 if (group === 'กน') return 'กน'; // From Ror Han Fix
+                 if (group === 'กกา') return 'กกา'; // From Ror Han Fix
+                 return group; 
+            };
+            
+            // Adjust for Mae Gob (B/P/F/etc -> Kob)
+            // The previous `getFinalConsonantGroup` returns 'เบม' for B/P/M, which is actually mixed (Kob and Kom).
+            // Let's refine `getFinalConsonantGroup` logic inside here implicitly or rely on exact match?
+            // Better: Use the logic from previous standard tools provided in context
+            
+            // Re-implementing basic vowel/final match based on previous robust tools:
+            // Since we don't have the full map here, we assume exact group match from `getFinalConsonantGroup` implies rhyme.
+            // *Except* 'เบม' mixes 'B' (Kob) and 'M' (Kom). This needs splitting for accurate rhyme.
+            // *However*, looking at `getFinalConsonantGroup`, it groups 'บปผฝพฟภ' with 'ม'. This is incorrect for standard rhyme (Kob vs Kom).
+            // *Fix:* Let's patch `getFinalConsonantGroup` logic just for the check:
+            
+            const getRealFinal = (w) => {
+                const clean = w.replace(/[่้๊๋์]/g, '');
+                const last = clean[clean.length-1];
+                if ('บปผฝพฟภ'.includes(last)) return 'กบ';
+                if ('ม'.includes(last)) return 'กม';
+                if ('ง'.includes(last)) return 'กง';
+                if ('กขคฆ'.includes(last)) return 'กก';
+                if ('ยว'.includes(last)) return 'เกย/เกอว'; // simplified
+                if ('นณรลฬ'.includes(last)) return 'กน';
+                if ('จชซฌญฎฏฐฑฒดตถทธศษส'.includes(last)) return 'กด';
+                return 'กกา';
+            };
+            
+            // Ror Han Check override
+            let final1, final2;
+            
+            // Word 1
+            if (word1.replace(/[่้๊๋์]/g, '').endsWith("รรม")) final1 = 'กม'; // Ends with M sound
+            else if (word1.replace(/[่้๊๋์]/g, '').endsWith("รร")) final1 = 'กน'; // Ends with N sound
+            else if (word1.replace(/[่้๊๋์]/g, '').endsWith("รรณ")) final1 = 'กน';
+            else final1 = getRealFinal(word1);
+
+            // Word 2
+            if (word2.replace(/[่้๊๋์]/g, '').endsWith("รรม")) final2 = 'กม';
+            else if (word2.replace(/[่้๊๋์]/g, '').endsWith("รร")) final2 = 'กน';
+            else if (word2.replace(/[่้๊๋์]/g, '').endsWith("รรณ")) final2 = 'กน';
+            else final2 = getRealFinal(word2);
+
+            return sound1.vowel === sound2.vowel && final1 === final2;
         }
 
         // ฟังก์ชันลบ feedback สัมผัสเก่า
@@ -806,9 +953,20 @@
             if (!feedbackElement) return;
             
             const word = input.value.trim();
+            
             if (hasSamphus) {
-                feedbackElement.textContent = `✅ สัมผัสถูกต้อง: "${word}" ${type}สัมผัสกับ "${partnerWord}"`;
-                feedbackElement.className = 'samphus-feedback samphus-correct';
+                // Check Samphus Sam (Repeat/Homophone)
+                const isExactSame = word === partnerWord;
+                const isSameSound = isHomophone(word, partnerWord);
+                
+                if (isExactSame || isSameSound) {
+                     const warningMsg = isExactSame ? 'คำซ้ำ' : 'เสียงพ้อง';
+                     feedbackElement.textContent = `⚠️ ระวัง "สัมผัสซ้ำ" (${warningMsg}) กับ "${partnerWord}"`;
+                     feedbackElement.className = 'samphus-feedback samphus-warning';
+                } else {
+                     feedbackElement.textContent = `✅ สัมผัสถูกต้อง: "${word}" ${type}สัมผัสกับ "${partnerWord}"`;
+                     feedbackElement.className = 'samphus-feedback samphus-correct';
+                }
             } else {
                 feedbackElement.textContent = `❌ ไม่สัมผัส: "${word}" ไม่${type}สัมผัสกับ "${partnerWord}"`;
                 feedbackElement.className = 'samphus-feedback samphus-incorrect';
@@ -1136,9 +1294,21 @@
                     saveData(); // Auto-save
                 });
             });
-            
-            // Event listener สำหรับปุ่มคัดลอก (หากไม่ได้ใส่ inline onclick)
-            // copyButton.addEventListener('click', copyPlainText);
+
+            // Counter API Implementation
+           const counterElement = document.getElementById('view-count');
+           const namespace = 'manawak-tool';
+           const key = 'visits';
+           
+           fetch(`https://api.counterapi.dev/v1/${namespace}/${key}/up`)
+               .then(response => response.json())
+               .then(data => {
+                   counterElement.innerText = data.count;
+               })
+               .catch(error => {
+                   console.error('Error fetching count:', error);
+                   counterElement.innerText = 'Error';
+               });
         });
 
         // Elements SDK Configuration
